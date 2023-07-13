@@ -1,0 +1,41 @@
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+
+<div class="container mt-4">
+  {% for insight in insights %}
+  <div class="card mb-4">
+    <div class="card-header">
+      Prospect Name: {{ insight.client_id }}
+    </div>
+    <div class="card-body">
+      <p class="card-text">{{ insight.question1 }}</p>
+      <p class="card-text">{{ insight.question2 }}</p>
+      <p class="card-text">{{ insight.question3 }}</p>
+      <p class="card-text">{{ insight.question4 }}</p>
+      <p class="card-text">{{ insight.question5 }}</p>
+      <p class="card-text">Creator: {{ insight.creator_name }}</p>
+    </div>
+  </div>
+  {% endfor %}
+
+  <form method="POST" class="mt-4">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+      {{ form.client_id.label(class="form-label") }} 
+      {{ form.client_id(class="form-control") }}
+    </div>
+
+    <!-- Similar blocks for other fields -->
+
+    <div class="form-group">
+      {{ form.creator_name.label(class="form-label") }} 
+      {{ form.creator_name(class="form-control") }}
+    </div>
+
+    <div class="form-group form-check">
+      {{ form.complete.label(class="form-check-label") }} 
+      {{ form.complete(class="form-check-input") }}
+    </div>
+
+    <input type="submit" class="btn btn-primary" value="Submit">
+  </form>
+</div>

@@ -1,0 +1,40 @@
+{% block content %}
+
+<!doctype html>
+<html>
+    <body>
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            <p>
+                {{ form.title.label }}<br>
+                {{ form.title(size=30) }}
+            </p>
+            <p>
+                {{ form.question1.label }}<br>
+                {{ form.question1(size=30) }}
+            </p>
+            <p>
+                {{ form.question2.label }}<br>
+                {{ form.question2(size=30) }}
+            </p>
+            <p>
+                {{ form.question3.label }}<br>
+                {{ form.question3(size=30) }}
+            </p>
+            <p>
+                {{ form.question4.label }}<br>
+                {{ form.question4(size=30) }}
+            </p>
+            <p>
+                {{ form.question5.label }}<br>
+                {{ form.question5(size=30) }}
+            </p>
+            <p>
+                {{ form.update() }}
+                {{ form.complete() }}
+            </p>
+        </form>
+    </body>
+</html>
+    <!-- Your page content goes here -->
+{% endblock %}

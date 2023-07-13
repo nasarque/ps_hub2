@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Clients</title>
+</head>
+<body>
+    <h1>Clients</h1>
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('home') }}">Home</a></li>
+            <li><a href="{{ url_for('insights') }}">View Insights</a></li>
+        </ul>
+    </nav>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Actions</th>
+        </tr>
+        {% for client in clients %}
+        <tr>
+            <td>{{ client.name }}</td>
+            <td>{{ client.client_type }}</td>
+            <td>
+                <a href="{{ url_for('client', client_name=client.name) }}">View Details</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a href="{{ url_for('new_client') }}">Add New Client</a>
+</body>
+</html>

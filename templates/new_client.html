@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add New Client</title>
+</head>
+<body>
+    <h1>Add New Client</h1>
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('home') }}">Home</a></li>
+            <li><a href="{{ url_for('clients') }}">View Clients</a></li>
+            <li><a href="{{ url_for('insights') }}">View Insights</a></li>
+        </ul>
+    </nav>
+    <form method="POST">
+        <label for="client_name">Client Name:</label><br>
+        <input type="text" id="client_name" name="client_name"><br>
+        <input type="submit" value="Add Client">
+    </form>
+</body>
+</html>
