@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Insight</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Add Insight for Prospect: {{ prospect.name }}</h1>
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                <label for="date">Date:</label>
+                {{ form.date(class="form-control") }}
+            </div>
+            <div class="form-group">
+                <label for="question1">Question 1:</label>
+                {{ form.question1(class="form-control") }}
+            </div>
+            <div class="form-group">
+                <label for="question2">Question 2:</label>
+                {{ form.question2(class="form-control") }}
+            </div>
+            <div class="form-group">
+                <label for="question3">Question 3:</label>
+                {{ form.question3(class="form-control") }}
+            </div>
+            <div class="form-group">
+                <label for="question4">Question 4:</label>
+                {{ form.question4(class="form-control") }}
+            </div>
+            <div class="form-group">
+                <label for="question5">Question 5:</label>
+                {{ form.question5(class="form-control") }}
+            </div>
+            <div class="form-group">
+                <label for="creator_name">Created By:</label>
+                {{ form.creator_name(class="form-control") }}
+            </div>
+            <input type="submit" name="complete" value="Complete and Save" class="btn btn-success"/>
+            <input type="submit" name="save" value="Save" class="btn btn-primary"/>
+        </form>
+    </div>
+</body>
+</html>
