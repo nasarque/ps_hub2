@@ -1,29 +1,362 @@
-{% block title %}
-Prospect Details
+{% extends "base.html" %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="main-content">
+        <!-- Sidebar -->
+        <div id="sidebar">
+            <div id="who-is">
+                <h2>About {{ prospect.name }}</h2>
+                <p id="who-is-content">Loading... </p>
+                <button id="read-more-button" style="display: none;" onclick="expandText()">Read more</button>
+                <button id="read-less-button" style="display: none;" onclick="collapseText()">Read less</button>
+            </div>
+            <hr>
+            <!-- Similar Prospects Section -->
+            <div id="similar-prospects">
+                <h2>Similar Prospects</h2>
+                <p id="similar-prospects-content" data-prospect-id="{{ prospect.id }}">Loading... </p>
+                <ul id="similar-prospects-list"></ul> <!-- Add this line -->
+            </div>
+            <hr>
+            <!-- News Section -->
+            <div id="news-section">
+                <h2>News</h2>
+                <button onclick="fetchNews()">Get News</button>
+                <ul id="news-list"></ul>
+            </div>
+            <hr>
+            <!-- Other sections... -->
+        </div>
+
+        <!-- Main Content -->
+        <div id="content">
+            <p><a href="{{ url_for('all_prospects') }}">View All Prospects</a></p>
+            <h1>{{ prospect.name }}</h1>
+            <p>{{ prospect.date }}</p>
+            <p>{{ prospect.prospect_type }}</p>
+
+            <hr>
+            <h2>Insight</h2>
+            {% if prospect.insight %}
+                <div class="card" style="width: 40rem; height: 30rem; padding:10px;">
+                    <div class="card-header">
+                        <ul class="nav nav-tabs card-header-tabs" id="insightTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link active" id="question1-tab" data-toggle="tab" href="#question1" role="tab" aria-controls="question1" aria-selected="true">Question 1</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="question2-tab" data-toggle="tab" href="#question2" role="tab" aria-controls="question2" aria-selected="false">Question 2</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="question3-tab" data-toggle="tab" href="#question3" role="tab" aria-controls="question3" aria-selected="false">Question 3</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="question4-tab" data-toggle="tab" href="#question4" role="tab" aria-controls="question4" aria-selected="false">Question 4</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="question5-tab" data-toggle="tab" href="#question5" role="tab" aria-controls="question5" aria-selected="false">Question 5</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        <div class="tab-content" id="insightTabContent">
+                            <div class="tab-pane fade show active" id="question1" role="tabpanel" aria-labelledby="question1-tab">
+                                <p>{{ prospect.insight.question1 }}</p>
+                            </div>
+                            <div class="tab-pane fade" id="question2" role="tabpanel" aria-labelledby="question2-tab">
+                                <p>{{ prospect.insight.question2 }}</p>
+                            </div>
+                            <div class="tab-pane fade" id="question3" role="tabpanel" aria-labelledby="question3-tab">
+                                <p>{{ prospect.insight.question3 }}</p>
+                            </div>
+                            <div class="tab-pane fade" id="question4" role="tabpanel" aria-labelledby="question4-tab">
+                                <p>{{ prospect.insight.question4 }}</p>
+                            </div>
+                            <div class="tab-pane fade" id="question5" role="tabpanel" aria-labelledby="question5-tab">
+                                <p>{{ prospect.insight.question5 }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="{{ url_for('edit_insight', prospect_id=prospect.id, insight_id=prospect.insight.id) }}" class="btn btn-primary">Edit Insight</a>
+                    </div>
+                </div>
+            {% else %}
+                <a href="{{ url_for('add_insight', prospect_id=prospect.id) }}" class="btn btn-primary">Add Insight</a>
+            {% endif %}
+            <hr>
+            <h2>Notes</h2>
+            <div id="notesWrapper" style="position: relative; max-height: 300px; overflow: hidden;">
+                <div id="notesSection">
+                    {% for note in prospect.notes %}
+                        <div class="card note-card mt-3 mb-3" style="width: 40rem; height: 15rem;">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ note.creator_name }} - {{ note.date }}</h5>
+                                <p class="card-text">{{ note.content }}</p>
+                                <div class="card-footer">
+                                    <a href="{{ url_for('edit_note', prospect_id=prospect.id, note_id=note.id) }}" class="btn btn-primary">Edit Note</a>
+                                    <a href="{{ url_for('delete_note', prospect_id=prospect.id, note_id=note.id) }}" class="btn btn-danger">Delete Note</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div id="notesOverlay"></div>
+            </div>
+            <button id="seeMoreBtn" onclick="expandNotes()" class="btn btn-primary">See More</button>
+            <button id="seeFewerBtn" onclick="collapseNotes()" class="btn btn-primary" style="display: none;">See Fewer</button>
+
+            <br>
+            <a href="{{ url_for('add_note', prospect_id=prospect.id) }}">Add a new note</a>
+
+            <a href="{{ url_for('download_notes', prospect_id=prospect.id) }}" class="btn btn-primary">Download Notes</a>
+            <a href="{{ url_for('download_insight', prospect_id=prospect.id) }}" class="btn btn-primary">Download Insights</a>
+            <a href="{{ url_for('download_summary', prospect_id=prospect.id) }}" class="btn btn-primary">Download Full Summary</a>
+        </div>
+    </div>
+
+<script>
+    function fetchNews() {
+        console.log("fetchNews function called");  // Debugging line
+        var prospectName = encodeURIComponent("{{ prospect.name }}");
+        var url = 'https://newsapi.org/v2/everything?' +
+                  'q=' + prospectName + '&' +
+                  'searchIn=title&' +
+                  'pageSize=5&' +
+                  'sortBy=publishedAt&' +
+                  'apiKey=80ea5ce675cf4ac79a1b8c65f7c28620';
+
+        fetch(url)
+            .then(response => {
+                console.log("Response received");  // Debugging line
+                return response.json();
+            })
+            .then(data => {
+                console.log("Data received", data);  // Debugging line
+                var newsList = document.getElementById("news-list");
+
+                // Remove old news articles
+                while (newsList.firstChild) {
+                    newsList.firstChild.remove();
+                }
+
+                // Check if any articles were found
+                if (data.articles.length === 0) {
+                    var li = document.createElement("li");
+                    li.textContent = "No recent articles found for " + decodeURIComponent(prospectName);
+                    newsList.appendChild(li);
+                } else {
+                    // Add new news articles
+                    for (var i = 0; i < Math.min(5, data.articles.length); i++) {
+                        var article = data.articles[i];
+                        var li = document.createElement("li");
+
+                        var title = document.createElement("a");
+                        title.href = article.url;
+                        title.textContent = article.title;
+                        li.appendChild(title);
+
+                        var source = document.createElement("p");
+                        source.textContent = "Source: " + article.source.name;
+                        li.appendChild(source);
+
+                        var publishDate = document.createElement("p");
+                        publishDate.textContent = "Published at: " + new Date(article.publishedAt).toLocaleDateString();
+                        li.appendChild(publishDate);
+
+                        var description = document.createElement("p");
+                        description.textContent = article.description;
+                        li.appendChild(description);
+
+                        newsList.appendChild(li);
+                    }
+                }
+            }).catch(error => {
+                console.error("Error:", error);  // Debugging line
+            });
+    }
+
+
+    
+    function getGpt3Response() {
+    var contentElement = document.getElementById('who-is-content');
+    var readMoreButton = document.getElementById('read-more-button');
+    var readLessButton = document.getElementById('read-less-button');
+    
+    var prospectName = "{{ prospect.name }}";
+    var localStorageKey = 'whoIsData-' + prospectName;  // unique key for each prospect
+
+    var storedData = localStorage.getItem(localStorageKey);
+
+    if (storedData) {
+        console.log('Data loaded from cache');
+        var text = storedData;
+        contentElement.dataset.fullText = text;
+        if (text.length > 200) {
+            // show only the first 200 characters
+            contentElement.innerHTML = text.substr(0, 200) + "...";
+            // show read more button
+            readMoreButton.style.display = "block";
+        } else {
+            // if less than 200 characters, show all
+            contentElement.innerHTML = text;
+        }
+    } else {
+        console.log('Data not in cache, fetching from server');
+        fetch('/api/gpt3', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                prompt: `Explain what ${prospectName} does in 2 paragraphs. Make sure there is a paragraph break in between each paragraph. In the 3rd paragraph, provide their website.`
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Data:', data);
+            var text = data.text.replace(/\n/g, "<br>");
+
+            // Store the response in localStorage with a unique key
+            localStorage.setItem(localStorageKey, text);
+
+            if (text.length > 200) {
+                // store full text in a data attribute
+                contentElement.dataset.fullText = text;
+                // show only the first 200 characters
+                contentElement.innerHTML = text.substr(0, 200) + "...";
+                // show read more button
+                readMoreButton.style.display = "block";
+            } else {
+                // if less than 200 characters, show all
+                contentElement.innerHTML = text;
+            }})
+        .catch(error => {
+            console.error('Error:', error);
+        })
+    }
+    }
+
+    
+    function expandText() {
+    var contentElement = document.getElementById('who-is-content');
+    var readMoreButton = document.getElementById('read-more-button');
+    var readLessButton = document.getElementById('read-less-button');
+    
+    // replace the content with full text stored in the data attribute
+    contentElement.innerHTML = contentElement.dataset.fullText;
+    
+    // hide the read more button
+    readMoreButton.style.display = "none";
+    // show the read less button
+    readLessButton.style.display = "block";
+    }
+
+
+    function collapseText() {
+    var contentElement = document.getElementById('who-is-content');
+    var readMoreButton = document.getElementById('read-more-button');
+    var readLessButton = document.getElementById('read-less-button');
+    
+    // replace the content with the first 100 characters
+    contentElement.innerHTML = contentElement.dataset.fullText.substr(0, 200) + "...";
+
+    // hide the read less button
+    readLessButton.style.display = "none";
+    // show the read more button
+    readMoreButton.style.display = "block";
+    }
+
+    window.onload = function() {
+    var prospect_id = document.getElementById('similar-prospects-content').getAttribute('data-prospect-id');
+    getSimilarProspects(prospect_id);
+}
+
+    function getSimilarProspects(prospect_id) {
+        var listElement = document.getElementById('similar-prospects-list');
+
+        var localStorageKey = 'similarProspectsData-' + prospect_id;  // unique key for each prospect
+        var storedData = localStorage.getItem(localStorageKey);
+
+        if (storedData) {
+            console.log('Data loaded from cache');
+            var data = JSON.parse(storedData);
+            populateSimilarProspectsList(data, listElement);
+        } else {
+            console.log('Data not in cache, fetching from server');
+            fetch('/api/similar_prospects/' + encodeURIComponent(prospect_id))
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Data:', data);
+
+                    // Store the response in localStorage with a unique key
+                    localStorage.setItem(localStorageKey, JSON.stringify(data));
+
+                    populateSimilarProspectsList(data, listElement);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+    }
+
+    function populateSimilarProspectsList(data, listElement) {
+        var prospectNames = data.split(',');
+        prospectNames.forEach(prospectName => {
+            var li = document.createElement('li');
+            
+            // Create a text node with the prospect's name
+            var textNode = document.createTextNode(prospectName.trim());
+            
+            // Append the text node to the list item and the list item to the list
+            li.appendChild(textNode);
+            listElement.appendChild(li);
+        });
+    }
+
+    function expandNotes() {
+        document.getElementById("notesWrapper").style.maxHeight = "none";
+        document.getElementById("notesOverlay").style.display = "none";
+        document.getElementById("seeMoreBtn").style.display = "none";
+        document.getElementById("seeFewerBtn").style.display = "block";  // Show "See Fewer" button
+    }
+
+    function collapseNotes() {
+        document.getElementById("notesWrapper").style.maxHeight = "300px";
+        document.getElementById("notesOverlay").style.display = "block";
+        document.getElementById("seeMoreBtn").style.display = "block";  // Show "See More" button
+        document.getElementById("seeFewerBtn").style.display = "none";  // Hide "See Fewer" button
+}
+
+
+
+
+
+    document.addEventListener("DOMContentLoaded", function() {
+        getGpt3Response();
+        getSimilarProspects();
+    });
+
+
+
+</script>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+</body>
+</html>
+
 {% endblock %}
-
-<h1>{{ prospect.name }}</h1>
-<p>{{ prospect.date }}</p>
-<p>{{ prospect.prospect_type }}</p>
-
-<h2>Insight</h2>
-{% if prospect.insight %}
-    <p>{{ prospect.insight.question1 }}</p>
-    <!-- display other insight data -->
-    <a href="{{ url_for('edit_insight', prospect_id=prospect.id, insight_id=prospect.insight.id) }}">Edit Insight</a>
-{% else %}
-    <a href="{{ url_for('add_insight', prospect_id=prospect.id) }}">Add Insight</a>
-{% endif %}
-
-<h2>Notes</h2>
-{% for note in prospect.notes %}
-    <p>{{ note.creator_name }}: {{ note.content }}</p>
-    <a href="{{ url_for('edit_note', prospect_id=prospect.id, note_id=note.id) }}">Edit Note</a>
-{% endfor %}
-<br>
-<a href="{{ url_for('add_note', prospect_id=prospect.id) }}">Add a new note</a>
-
-<a href="{{ url_for('download_notes', prospect_id=prospect.id) }}" class="btn btn-primary">Download Notes</a>
-<a href="{{ url_for('download_insight', prospect_id=prospect.id) }}" class="btn btn-primary">Download Insights</a>
-<a href="{{ url_for('download_summary', prospect_id=prospect.id) }}" class="btn btn-primary">Download Full Summary</a>
-

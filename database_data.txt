@@ -1,0 +1,152 @@
+
+Prospect
+{
+    "id": 1,
+    "name": "SIT Investments",
+    "date": "2023-07-14",
+    "prospect_type": "sell-side",
+    "insight": {
+        "id": 1,
+        "date": "2023-07-22",
+        "question1": "This is answer 11",
+        "question2": "answer 2",
+        "question3": "answer 3",
+        "question4": "answer 4",
+        "question5": "answer 5",
+        "creator_name": "Nasar Qadir",
+        "prospect_id": 1
+    },
+    "notes": [
+        {
+            "id": 4,
+            "creator_name": "Nasar Qadir",
+            "date": "2023-07-22",
+            "content": "Israel",
+            "prospect_id": 1
+        },
+        {
+            "id": 5,
+            "creator_name": "Nasar Qadir",
+            "date": "2023-07-25",
+            "content": "Wadduppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp\r\n\r\n\r\ndenmark\r\n\r\nwaddup",
+            "prospect_id": 1
+        },
+        {
+            "id": 6,
+            "creator_name": "Nasar Qadir",
+            "date": "2023-07-28",
+            "content": "They say what",
+            "prospect_id": 1
+        },
+        {
+            "id": 7,
+            "creator_name": "Nasar Qadir",
+            "date": "2023-07-28",
+            "content": "Umer & Ali pagal",
+            "prospect_id": 1
+        },
+        {
+            "id": 8,
+            "creator_name": "Nasar Qadir",
+            "date": "2023-07-30",
+            "content": "Checking if the database_data.txt updates.",
+            "prospect_id": 1
+        },
+        {
+            "id": 9,
+            "creator_name": "Nasar Qadir",
+            "date": "2023-07-30",
+            "content": "Checking Again",
+            "prospect_id": 1
+        }
+    ]
+}
+{
+    "id": 2,
+    "name": "RBC Capital Markets",
+    "date": "2023-07-22",
+    "prospect_type": "buy-side",
+    "insight": null,
+    "notes": []
+}
+{
+    "id": 3,
+    "name": "Barclays",
+    "date": "2023-07-29",
+    "prospect_type": "sell-side",
+    "insight": null,
+    "notes": []
+}
+{
+    "id": 4,
+    "name": "HOOPP",
+    "date": "2023-07-29",
+    "prospect_type": "sell-side",
+    "insight": null,
+    "notes": []
+}
+{
+    "id": 5,
+    "name": "Citi Bank",
+    "date": "2023-07-29",
+    "prospect_type": "sell-side",
+    "insight": null,
+    "notes": []
+}
+
+Insight
+{
+    "id": 1,
+    "date": "2023-07-22",
+    "question1": "This is answer 11",
+    "question2": "answer 2",
+    "question3": "answer 3",
+    "question4": "answer 4",
+    "question5": "answer 5",
+    "creator_name": "Nasar Qadir",
+    "prospect_id": 1
+}
+
+Note
+{
+    "id": 4,
+    "creator_name": "Nasar Qadir",
+    "date": "2023-07-22",
+    "content": "Israel",
+    "prospect_id": 1
+}
+{
+    "id": 5,
+    "creator_name": "Nasar Qadir",
+    "date": "2023-07-25",
+    "content": "Wadduppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp\r\n\r\n\r\ndenmark\r\n\r\nwaddup",
+    "prospect_id": 1
+}
+{
+    "id": 6,
+    "creator_name": "Nasar Qadir",
+    "date": "2023-07-28",
+    "content": "They say what",
+    "prospect_id": 1
+}
+{
+    "id": 7,
+    "creator_name": "Nasar Qadir",
+    "date": "2023-07-28",
+    "content": "Umer & Ali pagal",
+    "prospect_id": 1
+}
+{
+    "id": 8,
+    "creator_name": "Nasar Qadir",
+    "date": "2023-07-30",
+    "content": "Checking if the database_data.txt updates.",
+    "prospect_id": 1
+}
+{
+    "id": 9,
+    "creator_name": "Nasar Qadir",
+    "date": "2023-07-30",
+    "content": "Checking Again",
+    "prospect_id": 1
+}

@@ -1,0 +1,97 @@
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #ccc; /* Top border with color #ccc */
+    margin: 20px 0; /* Margin on top and bottom */
+}
+
+#sidebar {
+    min-width: 200px; /* adjust as needed */
+    max-width: 400px;
+    width: 25%;
+    height: 100vh;
+    overflow-y: auto;
+    background-color: #f0f0f0;
+    padding: 10px;
+}
+
+@media screen and (max-width: 768px) {
+    #sidebar {
+        display: none;
+    }
+}
+
+#content {
+    width: 75%;
+    padding: 10px;
+}
+
+#news-section {
+    margin-bottom: 20px;
+}
+
+/* New CSS to handle layout of sidebar and content */
+.main-content {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.search-container {
+    position: relative;
+}
+
+
+#search-results {
+    position: absolute;
+    width: 100%;
+    max-height: 200px; /* Or whatever height you want */
+    overflow-y: auto; /* Adds a scrollbar if the results overflow the max height */
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 0 0 4px 4px; /* Rounded corners at the bottom */
+    display: none; /* Initially hidden */
+}
+
+#search-results a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: black;
+}
+
+.prospect-name {
+    font-size: 20px; /* Adjust as needed */
+}
+
+.content {
+    font-size: 16px; /* Adjust as needed */
+}
+
+.date {
+    font-size: 16px;
+}
+
+.container {
+    max-width: 1200px; /* Adjust as per your need */
+    margin: auto;
+  }
+  
+#notesOverlay {
+    position: absolute;
+    bottom: 0;
+    height: 100px;
+    width: 100%;
+    background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,1) 80%);
+  }
+
+#seeMoreBtn {
+    position: relative;
+    z-index: 2;
+  }
+

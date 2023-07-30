@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form method="POST">
+    {{ form.hidden_tag() }}
+    {{ form.query(size=20) }}
+    {{ form.submit() }}
+</form>
+
+{% if results %}
+    <ul>
+    {% for result in results %}
+        <a href="{{ url_for('prospect', prospect_id=result.id) }}">{{ result.name }}</a>
+    {% endfor %}
+    </ul>
+{% endif %}
+{% endblock %}

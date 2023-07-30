@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>NewsLinks</h1>
+
+<form method="POST">
+  <input type="text" name="search_term" required>
+  <input type="submit" value="Search">
+</form>
+
+{% for article in articles %}
+  <h2><a href="{{ article.url }}">{{ article.title }}</a></h2>
+  <h3>{{ article.source }}</h3>
+  <p>{{ article.description }}</p>
+{% endfor %}
+
+</body>
+</html>

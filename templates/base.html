@@ -1,57 +1,154 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 
-    <!-- Bootstrap CSS -->
+    <!-- Add jQuery and jQuery UI libraries here -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-    <style>
-        .sidebar {
-            min-height: 100vh;
-            background-color: #f8f9fa;
-        }
-        .sidebar-part {
-            padding: 1rem;
-            border-bottom: 1px solid #dee2e6;
-        }
-    </style>
-
-    <title>My Site</title>
 </head>
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar -->
-            <div class="col-md-3 sidebar">
-                <!-- First part -->
-                <div class="sidebar-part">
-                    <h4>Part 1</h4>
-                    <ul class="list-group">
-                        <li class="list-group-item"><a href="{{ url_for('all_prospects') }}">Page 1</a></li>
-                    </ul>
-                </div>
-
-                <!-- Second part -->
-                <div class="sidebar-part">
-                    <h4>Part 2</h4>
-                    <ul class="list-group">
-                        <li class="list-group-item"><a href="{{ url_for('all_prospects') }}">Page 3</a></li>
-                        <!-- add more pages as needed -->
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Main content -->
-            <div class="col-md-9">
-                {% block content %}
-                {% endblock %}
+    <!-- As a link -->
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container d-flex justify-content-between">
+            <a class="navbar-brand" href="{{ url_for ('home') }}">
+                <!-- <img src="/docs/5.0/assets/brand/bootstrap-logo.svg" alt="" width="30" height="24" class="d-inline-block align-text-top"> -->
+                PreSales Hub
+            </a>
+            <!-- Search -->
+            <div class="search-container">
+                <form class="" action="{{ url_for('search') }}" method="POST">
+                    {{ search_form.hidden_tag() }}
+                    <div class="input-group">
+                        {{ search_form.query(**{'class': 'form-control', 'type': 'search', 'placeholder': 'Search', 'aria-label': 'Search', 'autocomplete': 'off'}) }}
+                        <span class="input-group-btn">
+                            {{ search_form.submit(**{'class': 'btn btn-outline-success'}) }}
+                        </span>
+                    </div>
+                </form>
+                <div id="search-results"></div> <!-- Place for the search results -->
             </div>
         </div>
-    </div>
+    </nav>
+    
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<div class="container">
+    {% block content %}{% endblock %}
+</div>
+
+<script>
+    var searchResultsElement = document.getElementById('search-results');
+
+    // Show the search results when there are results
+    searchResultsElement.addEventListener('DOMNodeInserted', function() {
+        if (this.innerHTML.trim() !== '') {
+            this.style.display = 'block';
+        }
+    });
+
+    // Hide the search results when the search box loses focus
+    document.getElementById('query').addEventListener('blur', function() {
+        setTimeout(function() {
+            searchResultsElement.style.display = 'none';
+        }, 100); // Delay to allow clicking on a result before hiding
+    });
+
+    document.getElementById('query').addEventListener('input', function() {
+    // Get the current value of the input field
+    var query = this.value;
+
+    // Send a GET request to the Flask API endpoint
+    fetch('/api/search?query=' + encodeURIComponent(query))
+        .then(function(response) {
+            // Parse the JSON response
+            return response.json();
+        })
+        .then(function(results) {
+            // Clear the search results
+            var searchResultsElement = document.getElementById('search-results');
+            searchResultsElement.innerHTML = '';
+
+            for (var i = 0; i < results.length; i++) {
+                var result = results[i];
+                var resultElement = document.createElement('div'); 
+
+                var linkElement = document.createElement('a');
+                linkElement.href = result.url;
+                resultElement.appendChild(linkElement);
+
+                var nameAndContent = result.name.split(":");
+                var prospectName = nameAndContent[0];
+                var content = nameAndContent.length > 1 ? nameAndContent[1] : '';
+
+                var indexOfQuery = content.toLowerCase().indexOf(query.toLowerCase());
+                var truncatedContent;
+                if (indexOfQuery >= 0 && indexOfQuery < 27) {
+                    truncatedContent = content.substring(0, 27) + '...';
+                } else if (indexOfQuery >= 27) {
+                    truncatedContent = '...' + content.substring(indexOfQuery - 4, indexOfQuery + 23) + '...';
+                } else {
+                    truncatedContent = content.length > 30 ? content.substring(0, 27) + '...' : content;
+                }
+
+                // Create a text node for the prospect name
+                var prospectNameNode = document.createElement('div');
+                prospectNameNode.textContent = prospectName;
+                prospectNameNode.className = 'prospect-name';
+                linkElement.appendChild(prospectNameNode);
+
+                if (result.type === 'note') {
+                    // Create a text node for the note content
+                    var contentNode = document.createElement('div');
+                    contentNode.textContent = truncatedContent ? "Note: " + truncatedContent : '';
+                    contentNode.className = 'content';
+                    linkElement.appendChild(contentNode);
+                } else if (result.type === 'insight') {
+                    var questionNode = document.createElement('div');
+                    questionNode.textContent = truncatedContent ? "Question: " + truncatedContent : '';
+                    questionNode.className = 'question';
+                    linkElement.appendChild(questionNode);
+                }
+                
+                resultElement.tabIndex = i + 1;
+                searchResultsElement.appendChild(resultElement);
+            }
+
+    });
+});
+
+
+
+    // document.addEventListener('keydown', function(e) {
+    //     if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+    //         e.preventDefault();
+    //         // Determine the direction to move the focus
+    //         var direction = (e.key === 'ArrowDown') ? 1 : -1;
+
+    //         // Find the currently focused element
+    //         var focusedElement = document.activeElement;
+
+    //         // Filter only focusable elements
+    //         var focusableElements = Array.from(focusedElement.parentElement.children).filter(function(child) {
+    //             return child.tabIndex >= 0;
+    //         });
+
+    //         // Find the index of the currently focused element
+    //         var focusedElementIndex = focusableElements.indexOf(focusedElement);
+
+    //         // Calculate the index of the element to be focused
+    //         var newFocusIndex = focusedElementIndex + direction;
+
+    //         // If the new index is within bounds, move the focus to the element at the new index
+    //         if (newFocusIndex >= 0 && newFocusIndex < focusableElements.length) {
+    //             focusableElements[newFocusIndex].focus();
+    //         }
+    //     }
+    // });
+</script>
+
 </body>
 </html>
