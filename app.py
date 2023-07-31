@@ -272,7 +272,7 @@ def edit_insight(prospect_id, insight_id):
 
 @app.route('/new_prospect', methods=['GET', 'POST'])
 def new_prospect():
-    search_form = SearchForm()
+    #search_form = SearchForm()
     form = ProspectForm()
 
     if form.validate_on_submit():
@@ -288,7 +288,7 @@ def new_prospect():
         flash('prospect has been created.')
         return redirect(url_for('prospect', prospect_id=new_prospect.id))
 
-    return render_template('new_prospect.html', search_form,form=form)
+    return render_template('new_prospect.html', form=form)
 
 
 @app.route('/prospect/<int:prospect_id>', methods=['GET'])

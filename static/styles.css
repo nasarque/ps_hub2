@@ -1,7 +1,12 @@
 
+html, body, .main-content {
+    height: 100%;
+}
+
 body {
     display: flex;
     flex-direction: column;
+    height: 100%;
 }
 
 hr {
@@ -13,12 +18,14 @@ hr {
 #sidebar {
     min-width: 200px; /* adjust as needed */
     max-width: 400px;
-    width: 25%;
+    width: 40%;
     height: 100vh;
     overflow-y: auto;
     background-color: #f0f0f0;
     padding: 10px;
+    padding-left: 90px;
 }
+
 
 @media screen and (max-width: 768px) {
     #sidebar {
@@ -29,10 +36,13 @@ hr {
 #content {
     width: 75%;
     padding: 10px;
+    padding-left: 40px;
+    height: 100vh;
 }
 
 #news-section {
     margin-bottom: 20px;
+    height: 100vh;
 }
 
 /* New CSS to handle layout of sidebar and content */
@@ -40,6 +50,7 @@ hr {
     display: flex;
     flex-direction: row;
     width: 100%;
+    height: 100vh;
 }
 
 .search-container {
