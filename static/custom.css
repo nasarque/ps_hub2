@@ -1,0 +1,54 @@
+body {
+    background-color: #ffffff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #000000;
+}
+
+/* .container {
+    max-width: 960px;
+    margin: 50px auto;
+} */
+
+.table {
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+}
+
+.table th, .table td {
+    padding: 15px;
+}
+
+.table th {
+    color: #ffffff;
+    background-color: #000000;  /* black */
+}
+
+.table a {
+    color: #000000;  /* black */
+}
+
+.btn {
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: scale(1.02);
+}
+
+.btn-success {
+    background-color: #000000;  /* black */
+    border-color: #000000;  /* black */
+    color: #ffffff;  /* white */
+}
+
+.btn-info, .btn-light {
+    background-color: #ffffff;  /* white */
+    border-color: #000000;  /* black */
+    color: #000000;  /* black */
+}
+
+.btn-info:hover, .btn-light:hover {
+    background-color: #000000;  /* black */
+    color: #ffffff;  /* white */
+}
